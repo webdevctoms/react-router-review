@@ -3,6 +3,9 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 //this will save the src to the pokeball so don't need to write it in for images
 import Pokeball from '../pokeball.png';
+import { connect } from 'react-redux';
+import {getPosts} from '../actions/postActions';
+
 //use axios to make requests
 //convert to class to use component did mount
 class Home extends React.Component {
@@ -10,6 +13,10 @@ class Home extends React.Component {
         posts:[]
     };
 
+    componentDidMount(){
+        this.props.dispatch(getPosts());
+    }
+    /*
     componentDidMount(){
         axios.get('https://jsonplaceholder.typicode.com/posts')
 
@@ -23,12 +30,13 @@ class Home extends React.Component {
             console.log(err);
         })
     }
-
+    */
     render(){
-        const posts = this.state.posts.length ? this.state.posts.map((post,i) => {
+        console.log('props from reducer: ',this.props.posts);
+        const posts = this.props.posts.posts.length ? this.props.posts.posts.map((post,i) => {
             return(
                 <div className="post card" key={post.id}>
-                    <img src={Pokeball} />
+                    <img src={Pokeball} alt='pokeball'/>
                     <div className='card-content'>
                     <Link to={'/' + post.id}>
                         <span className="card-title red-text">Title {i} {post.title}</span>
@@ -52,4 +60,8 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    posts:state.posts
+});
+
+export default connect(mapStateToProps)(Home);

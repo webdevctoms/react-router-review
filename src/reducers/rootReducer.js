@@ -1,12 +1,39 @@
+import {
+    GET_POSTS_REQUEST,
+    GET_POSTS_SUCCESS,
+    GET_POSTS_ERROR
+} from '../actions/postActions';
+
 const initState = {
-    posts:[
-        {id:'1',title:'post 1',body:'post 1 body'},
-        {id:'2',title:'post 2',body:'post 2 body'},
-        {id:'3',title:'post 3',body:'post 3 body'}
-    ]
-}
+    error:null,
+    loading:null,
+    posts:[]
+};
 
 const rootReducer = (state = initState,action) => {
+    if(action.type === GET_POSTS_REQUEST){
+        return Object.assign({},state,{
+            error:null,
+            loading:true
+        });
+    }
+
+    else if(action.type === GET_POSTS_SUCCESS){
+        return Object.assign({},state,{
+            error:null,
+            loading:false,
+            posts:action.posts
+        });
+    }
+
+    else if(action.type === GET_POSTS_ERROR){
+        return Object.assign({},state,{
+            error:action.err,
+            loading:false,
+            posts:[]
+        });
+    }
+
     return state;
 }
 
