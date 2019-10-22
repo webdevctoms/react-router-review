@@ -1,31 +1,18 @@
 import React from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 //this will save the src to the pokeball so don't need to write it in for images
 import Pokeball from '../pokeball.png';
+//function that is invoked to bring back HOC
+import {connect} from 'react-redux';
 //use axios to make requests
 //convert to class to use component did mount
 class Home extends React.Component {
-    state = {
-        posts:[]
-    };
-
-    componentDidMount(){
-        axios.get('https://jsonplaceholder.typicode.com/posts')
-
-        .then((resData) => {
-            console.log(resData);
-            this.setState({
-                posts:resData.data
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
 
     render(){
-        const posts = this.state.posts.length ? this.state.posts.map((post,i) => {
+        //do this cus of combine reducers
+        console.log(this.props.posts);
+        const postData = this.props.posts.posts;
+        const posts = postData.length ? postData.map((post,i) => {
             return(
                 <div className="post card" key={post.id}>
                     <img src={Pokeball} />
@@ -51,5 +38,12 @@ class Home extends React.Component {
         )
     }
 }
+//stae = state of the store of redux
+const mapStateToProps = (state) => {
+    return{
+        posts:state.posts
+    }
+};
 
-export default Home;
+//connect is a function that returns higher order component then that HOC is wrapping the home component
+export default connect(mapStateToProps)(Home);

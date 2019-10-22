@@ -1,4 +1,5 @@
 const initState = {
+    users:[],
     posts:[
         {id:'1',title:'post 1',body:'post 1 body'},
         {id:'2',title:'post 2',body:'post 2 body'},
@@ -7,6 +8,13 @@ const initState = {
 }
 
 const rootReducer = (state = initState,action) => {
+    console.log(action);
+    if(action.type === 'DELETE_POST'){
+        let newPosts = state.posts.filter(post => post.id !== action.id);
+        return Object.assign({},state,{
+            posts:newPosts
+        });
+    }
     return state;
 }
 

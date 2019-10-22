@@ -1,35 +1,22 @@
 import React from 'react';
-import axios from 'axios';
+import {connect} from 'react-redux';
 
 class Post extends React.Component {
-    state ={
-        post:null
-    };
 
-    componentDidMount(){
-        //get route param from extra props data from router
-        console.log(this.props);
-        let id = this.props.match.params.post_id;
-        const url = 'https://jsonplaceholder.typicode.com/posts/' + id;
-        axios.get(url)
-        .then( resData => {
-            console.log('single post: ',resData);
-            this.setState({
-                post:resData.data
-            });
-        })
-
-        .catch(err => {
-            console.log(err);
-        })
-        
+    handleClick = () =>{
+        this.props.deletePost(this.props.post.id)
+        this.props.history.push('/');
     }
 
     render(){
-        const post = this.state.post ? (
+        console.log(this.props);
+        const post = this.props.post ? (
             <div className="post">
-                <h4 className="center">{this.state.post.title}</h4>
-                <p className="center">{this.state.post.body}</p>
+                <h4 className="center">{this.props.post.title}</h4>
+                <p className="center">{this.props.post.body}</p>
+                <div className="center">
+                    <button className="btn grey" onClick={this.handleClick}>Delete</button>
+                </div>
             </div>
         ) : (
             <div>
@@ -38,11 +25,28 @@ class Post extends React.Component {
         )
         return(
             <div className="container">
-                <h4>route param: {this.state.id}</h4>
                 {post}
             </div>
         )
     }
 }
+//ownprops ref props before props attached from connect function
+//getting id from url
+//then looking for post from state
+const mapStateToProps = (state, ownProps) => {
+    let id = ownProps.match.params.post_id;
+    return{
+        post:state.posts.posts.find(post => post.id === id)
+    }
+};
 
-export default Post;
+//map dispatch to props
+//essentially store.dispatch({action}) action = {type:..,etc}
+const mapDispatchToProps = (dispatch) => {
+    //delete post dispatches a action
+    return{
+        deletePost:(id) => {dispatch({type:'DELETE_POST',id:id})}
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Post);

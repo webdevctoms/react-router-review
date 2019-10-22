@@ -3,6 +3,6 @@ import rootReducer from './reducers/rootReducer';
 
 export default createStore(
     combineReducers({
-        rootReducer
+        posts:rootReducer
     })
 );
