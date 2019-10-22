@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import {getPost} from '../actions/postActions';
 
 class Post extends React.Component {
     state ={
@@ -9,27 +11,16 @@ class Post extends React.Component {
     componentDidMount(){
         //get route param from extra props data from router
         console.log(this.props);
-        let id = this.props.match.params.post_id;
-        const url = 'https://jsonplaceholder.typicode.com/posts/' + id;
-        axios.get(url)
-        .then( resData => {
-            console.log('single post: ',resData);
-            this.setState({
-                post:resData.data
-            });
-        })
-
-        .catch(err => {
-            console.log(err);
-        })
-        
+        const id = this.props.match.params.post_id;
+        this.props.dispatch(getPost(id));
     }
 
     render(){
-        const post = this.state.post ? (
+        console.log('props: ',this.props.posts);
+        const post = this.props.posts.current_post ? (
             <div className="post">
-                <h4 className="center">{this.state.post.title}</h4>
-                <p className="center">{this.state.post.body}</p>
+                <h4 className="center">{this.props.posts.current_post.title}</h4>
+                <p className="center">{this.props.posts.current_post.body}</p>
             </div>
         ) : (
             <div>
@@ -45,4 +36,8 @@ class Post extends React.Component {
     }
 }
 
-export default Post;
+const mapStateToProps = state => ({
+    posts:state.posts
+});
+
+export default connect(mapStateToProps)(Post);

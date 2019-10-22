@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 //this will save the src to the pokeball so don't need to write it in for images
 import Pokeball from '../pokeball.png';
@@ -16,21 +15,7 @@ class Home extends React.Component {
     componentDidMount(){
         this.props.dispatch(getPosts());
     }
-    /*
-    componentDidMount(){
-        axios.get('https://jsonplaceholder.typicode.com/posts')
-
-        .then((resData) => {
-            console.log(resData);
-            this.setState({
-                posts:resData.data
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
-    */
+    
     render(){
         console.log('props from reducer: ',this.props.posts);
         const posts = this.props.posts.posts.length ? this.props.posts.posts.map((post,i) => {

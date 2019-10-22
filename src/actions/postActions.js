@@ -23,6 +23,29 @@ export const get_posts_error = (err) => ({
     err
 });
 
+//get single post
+export const GET_POST_REQUEST = 'GET_POST_REQUEST';
+//action
+export const get_post_requests = () => ({
+    type:GET_POST_REQUEST
+});
+
+//type get posts success
+export const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
+//action
+export const get_post_success = (post) => ({
+    type:GET_POST_SUCCESS,
+    post
+});
+
+//type get posts success
+export const GET_POST_ERROR = 'GET_POST_ERROR';
+//action
+export const get_post_error = (err) => ({
+    type:GET_POST_ERROR,
+    err
+});
+
 export const getPosts = () => (dispatch) => {
     dispatch(get_posts_requests());
     axios.get(API_URL)
@@ -33,5 +56,18 @@ export const getPosts = () => (dispatch) => {
 
     .catch(err => {
         dispatch(get_posts_error(err));
+    })
+}
+
+export const getPost = (id) => (dispatch) => {
+    dispatch(get_post_requests());
+    axios.get(API_URL + '/' + id)
+
+    .then(postData => {
+        dispatch(get_post_success(postData.data));
+    })
+
+    .catch(err => {
+        dispatch(get_post_error(err));
     })
 }
